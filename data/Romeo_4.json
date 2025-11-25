@@ -1,0 +1,672 @@
+{
+    "characters": [
+        {
+            "id": 1,
+            "common_name": "Romeo",
+            "main_character": true,
+            "names": [
+                "Romeo",
+                "Young Romeo",
+                "my lord",
+                "Sweet Montague",
+                "my true love",
+                "my love",
+                "dear saint",
+                "Signior Romeo",
+                "gentleman",
+                "young Romeo",
+                "true knight",
+                "fearful man",
+                "young son",
+                "pupil mine",
+                "husband",
+                "sweet",
+                "my soul",
+                "my master",
+                "my kinsman",
+                "my son",
+                "my son and heir",
+                "boy",
+                "villain",
+                "runagate",
+                "traitor murderer",
+                "my cousin",
+                "Montague",
+                "my cousin Romeo",
+                "my good lord",
+                "that banish'd haughty Montague"
+            ],
+            "description": "The passionate and impulsive son of Lord Montague, and the protagonist. He quickly shifts his affections from Rosaline to Juliet, leading to their secret marriage. His rash actions, such as avenging Mercutio's death by killing Tybalt, result in his banishment. Driven by intense devotion and fatalism, he tragically takes his own life upon believing Juliet to be dead. Romeo's deep emotions and hasty decisions are central to the play's tragic arc. He is a romantic idealist, ultimately sacrificing himself for love."
+        },
+        {
+            "id": 2,
+            "common_name": "Juliet",
+            "main_character": true,
+            "names": [
+                "Juliet",
+                "my daughter",
+                "lamb",
+                "ladybird",
+                "Jule",
+                "young lady",
+                "daughter Juliet",
+                "fair daughter",
+                "sweet love",
+                "my lady",
+                "dear saint",
+                "fair maid",
+                "my soul",
+                "true love",
+                "mistress",
+                "my lady and my wife",
+                "pensive daughter",
+                "headstrong",
+                "wayward girl",
+                "child",
+                "my love",
+                "my wife",
+                "my only life",
+                "poor one",
+                "sweet flower",
+                "fair creature",
+                "lady",
+                "true and faithful Juliet",
+                "harlotry",
+                "baggage",
+                "tallow-face",
+                "wretch",
+                "my young lady"
+            ],
+            "description": "The intelligent, loyal, and fiercely independent thirteen-year-old daughter of Lord Capulet, and the female protagonist. She falls deeply in love with Romeo, defying her family's ancient feud. Juliet displays remarkable courage and maturity in her pursuit of love, even agreeing to Friar Lawrence's desperate plan to fake her death. Her unwavering devotion ultimately leads her to take her own life upon discovering Romeo's death. Her character embodies the purity of love against societal conflict, highlighting the devastating consequences of the feud."
+        },
+        {
+            "id": 3,
+            "common_name": "Friar Lawrence",
+            "main_character": true,
+            "names": [
+                "Friar Lawrence",
+                "ghostly Sire",
+                "father",
+                "ghostly father",
+                "blessed man",
+                "holy Friar",
+                "holy Lawrence",
+                "reverend holy Friar",
+                "holy father",
+                "comfortable Friar",
+                "holy sir",
+                "brother",
+                "divine",
+                "sin-absolver",
+                "friend profess'd",
+                "holy Franciscan Friar"
+            ],
+            "description": "A Franciscan friar who serves as Romeo and Juliet's spiritual advisor and confidante. He marries them in secret, hoping their union will end the family feud. Knowledgeable in herbs and potions, he devises the sleeping draught for Juliet. Despite his good intentions and wisdom, his elaborate plans are often thwarted by unforeseen events and poor communication. His actions, though well-meaning, inadvertently contribute to the lovers' tragic downfall, as he is unable to prevent the chain of events."
+        },
+        {
+            "id": 4,
+            "common_name": "Nurse",
+            "main_character": true,
+            "names": [
+                "Nurse",
+                "good Nurse",
+                "honey Nurse",
+                "old lady",
+                "ancient lady",
+                "Angelica",
+                "good gentlewoman",
+                "sweet Nurse",
+                "madam",
+                "my dear Nurse",
+                "poor ropes",
+                "old woman"
+            ],
+            "description": "Juliet's loyal and affectionate personal attendant and confidante since birth, providing comic relief with her bawdy remarks. She acts as a crucial go-between for Romeo and Juliet, facilitating their secret romance. While she genuinely loves Juliet, her practicality and shifting loyalties (advising Juliet to marry Paris after Romeo's banishment) create a stark contrast with Juliet's idealistic love. She serves as a maternal figure, but her worldly advice ultimately fails Juliet in her time of greatest need, leading to a sense of betrayal."
+        },
+        {
+            "id": 5,
+            "common_name": "Mercutio",
+            "main_character": true,
+            "names": [
+                "Mercutio",
+                "kinsman to the Prince",
+                "friend to Romeo",
+                "gentle Mercutio",
+                "good Mercutio",
+                "Prince of cats",
+                "courageous captain of compliments",
+                "gentleman",
+                "brave Mercutio",
+                "gallant spirit",
+                "rat-catcher",
+                "Good King of Cats",
+                "Romeo's friend",
+                "brave Mercutio"
+            ],
+            "description": "Romeo's witty, cynical, and flamboyant best friend, and a kinsman to Prince Escalus. He is known for his elaborate wordplay, particularly the Queen Mab speech, and his disdain for romantic love and the Capulet-Montague feud. Mercutio is fatally wounded by Tybalt when he intervenes in a duel to defend Romeo's honor, marking a pivotal moment. His death escalates the conflict, prompting Romeo's revenge and subsequent banishment. He embodies a spirited, cynical foil to Romeo's romanticism, dying a victim of the very feud he mocked."
+        },
+        {
+            "id": 6,
+            "common_name": "Tybalt",
+            "main_character": true,
+            "names": [
+                "Tybalt",
+                "nephew to Lady Capulet",
+                "fiery Tybalt",
+                "villain",
+                "rat-catcher",
+                "King of Cats",
+                "cousin",
+                "murderer",
+                "my cousin",
+                "my brother's child",
+                "wretched boy",
+                "Tybalt, the kinsman to old Capulet",
+                "Prince of cats"
+            ],
+            "description": "Juliet's hot-headed and aggressive cousin, renowned for his excellent swordsmanship and intense hatred for the Montagues. He instigates fights and is quick to anger, especially towards Romeo, whom he sees as dishonoring the Capulet feast. His killing of Mercutio leads directly to his own death at Romeo's hand, escalating the feud dramatically. He is a primary antagonist, driven by a rigid sense of family honor and a desire for confrontation, fueling the play's tragic events through his violent nature."
+        },
+        {
+            "id": 7,
+            "common_name": "Capulet",
+            "main_character": true,
+            "names": [
+                "Capulet",
+                "head of a Veronese family",
+                "old Capulet",
+                "my lord",
+                "good cousin Capulet",
+                "master",
+                "great rich Capulet",
+                "father",
+                "good father",
+                "my lord and father",
+                "careful father",
+                "my brother Montague",
+                "Sir Capulet"
+            ],
+            "description": "The patriarch of the Capulet family and Juliet's father. Initially appearing reasonable, he becomes tyrannical and inflexible when Juliet defies his will to marry Paris, threatening to disown her. His eagerness to uphold family honor and social standing, coupled with his volatile temper, forces Juliet into a desperate situation. His actions significantly contribute to the tragedy by pressure on Juliet and fueling the feud, ultimately leading to the deaths of the lovers."
+        },
+        {
+            "id": 8,
+            "common_name": "Lady Capulet",
+            "main_character": true,
+            "names": [
+                "Lady Capulet",
+                "wife to Capulet",
+                "madam",
+                "my lady",
+                "mother",
+                "my lady mother",
+                "wife",
+                "Juliet's mother",
+                "mistress"
+            ],
+            "description": "Juliet's mother and Lord Capulet's wife. She maintains a formal and distant relationship with Juliet, relying heavily on the Nurse for her upbringing. Lady Capulet actively pushes for Juliet's marriage to Paris, aligning with her husband's social ambitions. She expresses intense grief and a strong desire for vengeance against Romeo after Tybalt's death. Her emotional detachment from Juliet and adherence to societal expectations contribute to Juliet's isolation and tragic choices, ultimately leading to her own sorrow."
+        },
+        {
+            "id": 9,
+            "common_name": "Paris",
+            "main_character": true,
+            "names": [
+                "Paris",
+                "young Nobleman",
+                "kinsman to the Prince",
+                "County",
+                "County Paris",
+                "gallant young and noble gentleman",
+                "lord",
+                "youthful lord",
+                "son",
+                "true love",
+                "noble Paris",
+                "noble earl",
+                "County Anselmo",
+                "my lord",
+                "my love",
+                "the County"
+            ],
+            "description": "A wealthy, handsome young nobleman and kinsman to Prince Escalus, who seeks to marry Juliet. He is favored by Lord Capulet and views himself as Juliet's rightful husband. His persistent courtship, endorsed by Juliet's parents, becomes a major obstacle to Romeo and Juliet's clandestine love, directly precipitating Juliet's desperate plan to fake her death. He is ultimately killed by Romeo at Juliet's tomb, adding another layer of tragedy to the climax and highlighting the feud's widespread destruction."
+        },
+        {
+            "id": 10,
+            "common_name": "Prince Escalus",
+            "main_character": true,
+            "names": [
+                "Prince Escalus",
+                "Prince of Verona",
+                "Prince",
+                "noble Prince",
+                "Sovereign",
+                "my liege"
+            ],
+            "description": "The neutral ruler of Verona, responsible for maintaining peace between the feuding Montague and Capulet families. He repeatedly warns both families of severe penalties for disturbing the public order. After Mercutio's death, he banishes Romeo, a decision that inadvertently sets the stage for the tragic climax. He represents law and order, and his final pronouncement regarding the families' collective guilt and punishment underscores the play's themes of societal conflict and its devastating consequences, acknowledging his own loss of kinsmen."
+        }
+    ],
+    "relations": [
+        {
+            "id1": 1,
+            "id2": 2,
+            "relation": [
+                "lovers",
+                "married",
+                "deep affection",
+                "secret alliance"
+            ],
+            "weight": 10,
+            "positivity": 1.0
+        },
+        {
+            "id1": 1,
+            "id2": 3,
+            "relation": [
+                "spiritual advisor",
+                "confidante",
+                "conspirator",
+                "ally"
+            ],
+            "weight": 9,
+            "positivity": 0.8
+        },
+        {
+            "id1": 1,
+            "id2": 4,
+            "relation": [
+                "messenger",
+                "confidante",
+                "ally"
+            ],
+            "weight": 7,
+            "positivity": 0.6
+        },
+        {
+            "id1": 1,
+            "id2": 5,
+            "relation": [
+                "best friends"
+            ],
+            "weight": 9,
+            "positivity": 0.9
+        },
+        {
+            "id1": 1,
+            "id2": 6,
+            "relation": [
+                "enemies",
+                "kinsmen-by-marriage",
+                "killer/victim"
+            ],
+            "weight": 9,
+            "positivity": -1.0
+        },
+        {
+            "id1": 1,
+            "id2": 7,
+            "relation": [
+                "enemies",
+                "father-in-law (secret)",
+                "family feud"
+            ],
+            "weight": 8,
+            "positivity": -0.8
+        },
+        {
+            "id1": 1,
+            "id2": 8,
+            "relation": [
+                "enemies",
+                "mother-in-law (secret)",
+                "family feud"
+            ],
+            "weight": 6,
+            "positivity": -0.7
+        },
+        {
+            "id1": 1,
+            "id2": 9,
+            "relation": [
+                "rivals in love",
+                "enemies",
+                "killer/victim"
+            ],
+            "weight": 8,
+            "positivity": -0.9
+        },
+        {
+            "id1": 1,
+            "id2": 10,
+            "relation": [
+                "subject/ruler",
+                "banisher",
+                "judge"
+            ],
+            "weight": 7,
+            "positivity": -0.5
+        },
+        {
+            "id1": 2,
+            "id2": 3,
+            "relation": [
+                "spiritual advisor",
+                "confidante",
+                "conspirator"
+            ],
+            "weight": 9,
+            "positivity": 0.8
+        },
+        {
+            "id1": 2,
+            "id2": 4,
+            "relation": [
+                "caregiver",
+                "confidante",
+                "betrayed"
+            ],
+            "weight": 9,
+            "positivity": -0.8
+        },
+        {
+            "id1": 2,
+            "id2": 6,
+            "relation": [
+                "cousin",
+                "family",
+                "beloved kinsman"
+            ],
+            "weight": 7,
+            "positivity": 0.7
+        },
+        {
+            "id1": 2,
+            "id2": 7,
+            "relation": [
+                "father/daughter",
+                "authoritative",
+                "hostile",
+                "controlling"
+            ],
+            "weight": 9,
+            "positivity": -0.9
+        },
+        {
+            "id1": 2,
+            "id2": 8,
+            "relation": [
+                "mother/daughter",
+                "formal",
+                "hostile",
+                "demanding"
+            ],
+            "weight": 8,
+            "positivity": -0.7
+        },
+        {
+            "id1": 2,
+            "id2": 9,
+            "relation": [
+                "suitor/unwilling bride",
+                "betrothed (by parents)",
+                "victim"
+            ],
+            "weight": 8,
+            "positivity": -0.7
+        },
+        {
+            "id1": 3,
+            "id2": 4,
+            "relation": [
+                "co-conspirators",
+                "allies"
+            ],
+            "weight": 6,
+            "positivity": 0.5
+        },
+        {
+            "id1": 3,
+            "id2": 7,
+            "relation": [
+                "advisor",
+                "community figure"
+            ],
+            "weight": 6,
+            "positivity": 0.5
+        },
+        {
+            "id1": 3,
+            "id2": 8,
+            "relation": [
+                "advisor",
+                "community figure"
+            ],
+            "weight": 4,
+            "positivity": 0.3
+        },
+        {
+            "id1": 3,
+            "id2": 9,
+            "relation": [
+                "confessor",
+                "advisor",
+                "unwilling co-conspirator"
+            ],
+            "weight": 6,
+            "positivity": 0.1
+        },
+        {
+            "id1": 3,
+            "id2": 10,
+            "relation": [
+                "subject/ruler",
+                "witness",
+                "confessor"
+            ],
+            "weight": 7,
+            "positivity": 0.0
+        },
+        {
+            "id1": 4,
+            "id2": 5,
+            "relation": [
+                "mocked",
+                "antagonistic encounter"
+            ],
+            "weight": 3,
+            "positivity": -0.5
+        },
+        {
+            "id1": 4,
+            "id2": 6,
+            "relation": [
+                "family",
+                "mourner",
+                "affection"
+            ],
+            "weight": 7,
+            "positivity": 0.7
+        },
+        {
+            "id1": 4,
+            "id2": 7,
+            "relation": [
+                "servant/master",
+                "employee"
+            ],
+            "weight": 5,
+            "positivity": 0.0
+        },
+        {
+            "id1": 4,
+            "id2": 8,
+            "relation": [
+                "servant/mistress",
+                "employee"
+            ],
+            "weight": 6,
+            "positivity": 0.1
+        },
+        {
+            "id1": 4,
+            "id2": 9,
+            "relation": [
+                "supporter (of marriage to Juliet)",
+                "acquaintance"
+            ],
+            "weight": 3,
+            "positivity": 0.3
+        },
+        {
+            "id1": 5,
+            "id2": 7,
+            "relation": [
+                "guest/host",
+                "acquaintance"
+            ],
+            "weight": 2,
+            "positivity": 0.0
+        },
+        {
+            "id1": 5,
+            "id2": 8,
+            "relation": [
+                "guest/host",
+                "acquaintance"
+            ],
+            "weight": 2,
+            "positivity": 0.0
+        },
+        {
+            "id1": 5,
+            "id2": 9,
+            "relation": [
+                "kinsmen (to Prince)",
+                "acquaintance"
+            ],
+            "weight": 3,
+            "positivity": 0.5
+        },
+        {
+            "id1": 5,
+            "id2": 6,
+            "relation": [
+                "enemies",
+                "duellists",
+                "killer/victim"
+            ],
+            "weight": 8,
+            "positivity": -1.0
+        },
+        {
+            "id1": 5,
+            "id2": 10,
+            "relation": [
+                "kinsmen",
+                "subject/ruler"
+            ],
+            "weight": 7,
+            "positivity": 0.7
+        },
+        {
+            "id1": 6,
+            "id2": 7,
+            "relation": [
+                "uncle/nephew",
+                "family"
+            ],
+            "weight": 7,
+            "positivity": 0.6
+        },
+        {
+            "id1": 6,
+            "id2": 8,
+            "relation": [
+                "aunt/nephew",
+                "family"
+            ],
+            "weight": 8,
+            "positivity": 0.8
+        },
+        {
+            "id1": 6,
+            "id2": 9,
+            "relation": [
+                "acquaintance",
+                "family (potential)"
+            ],
+            "weight": 2,
+            "positivity": 0.1
+        },
+        {
+            "id1": 6,
+            "id2": 10,
+            "relation": [
+                "subject/ruler",
+                "defiance",
+                "criminal/judge"
+            ],
+            "weight": 6,
+            "positivity": -0.8
+        },
+        {
+            "id1": 7,
+            "id2": 8,
+            "relation": [
+                "husband/wife",
+                "parents",
+                "allies (in feud/marriage plan)"
+            ],
+            "weight": 8,
+            "positivity": 0.0
+        },
+        {
+            "id1": 7,
+            "id2": 9,
+            "relation": [
+                "potential father-in-law/son-in-law",
+                "benefactor/suitor"
+            ],
+            "weight": 9,
+            "positivity": 0.9
+        },
+        {
+            "id1": 7,
+            "id2": 10,
+            "relation": [
+                "subject/ruler",
+                "head of house",
+                "adversary (in feud)"
+            ],
+            "weight": 7,
+            "positivity": -0.2
+        },
+        {
+            "id1": 8,
+            "id2": 9,
+            "relation": [
+                "potential mother-in-law/son-in-law",
+                "supporter"
+            ],
+            "weight": 7,
+            "positivity": 0.8
+        },
+        {
+            "id1": 8,
+            "id2": 10,
+            "relation": [
+                "subject/ruler",
+                "petitioner"
+            ],
+            "weight": 5,
+            "positivity": 0.0
+        },
+        {
+            "id1": 9,
+            "id2": 10,
+            "relation": [
+                "kinsmen",
+                "subject/ruler"
+            ],
+            "weight": 6,
+            "positivity": 0.7
+        }
+    ]
+}

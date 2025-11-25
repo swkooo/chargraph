@@ -2,12 +2,12 @@ import json
 import time
 import argparse
 import os
-import requests
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from pathlib import Path
 import networkx as nx
 import matplotlib.pyplot as plt
-import google.generativeai as genai
+import google.genai as genai
+from dotenv import load_dotenv
 
 class FileHandler:
     @staticmethod
@@ -32,20 +32,67 @@ class FileHandler:
             json.dump(content, f, ensure_ascii=False, indent=4)
 
 class APIClient:
-    def __init__(self, api_key: str, use_openrouter: bool = False, model: Optional[str] = None):
-        self.api_key = api_key
-        self.use_openrouter = use_openrouter
+    def __init__(self, api_keys: List[str], model: Optional[str] = None):
+        self.api_keys = api_keys
+        self.current_key_index = 0
         self.model = model
         self.max_retries = 100
         self.retry_delay = 60  # seconds
+        # Initialize genai client with first key
+        self.client = genai.Client(api_key=self.get_current_key())
+    
+    def get_current_key(self) -> str:
+        """Get the current API key."""
+        return self.api_keys[self.current_key_index]
+    
+    def switch_to_next_key(self) -> bool:
+        """Switch to the next API key. Returns True if switched, False if no more keys."""
+        if self.current_key_index < len(self.api_keys) - 1:
+            self.current_key_index += 1
+            self.client = genai.Client(api_key=self.get_current_key())
+            print(f"Switched to API key {self.current_key_index + 1}/{len(self.api_keys)}")
+            return True
+        return False
+    
+    def is_quota_exceeded_error(self, error: Exception) -> bool:
+        """Check if the error is a quota/rate limit error."""
+        error_str = str(error).lower()
+        quota_indicators = [
+            '429',
+            'resource_exhausted',
+            'quota',
+            'rate limit',
+            'rate_limit',
+            'too many requests'
+        ]
+        return any(indicator in error_str for indicator in quota_indicators)
     
     def create_messages(self, text: str, previous_json: Optional[Dict[str, Any]] = None, 
                        desc_sentences: Optional[int] = None, generate_portraits: bool = False,
-                       copies: int = 1) -> list:
+                       copies: int = 1, max_main_characters: Optional[int] = None) -> list:
         """Create messages for the API request."""
         system_prompt = """You are a literary analyst specializing in character extraction and relationship mapping. Your task is to:
 
-1. Character Identification:
+1. Character Identification:"""
+        
+        if max_main_characters is not None:
+            system_prompt += f"""
+   - FIRST, identify the PROTAGONIST (main character) of the story - the central character around whom the plot revolves
+   - THEN, extract the protagonist plus other characters who have relationship weights of 3.0 or higher with the protagonist
+   - Character selection criteria:
+     * The protagonist (1 character) - the main character of the story
+     * Characters with relationship weight >= 3.0 with the protagonist, ranked by weight (highest first)
+     * Maximum of {max_main_characters - 1} additional characters (excluding protagonist)
+     * If fewer than {max_main_characters - 1} characters have weight >= 3.0, include only those that meet the criteria (do NOT force to reach {max_main_characters} total)
+     * Do NOT filter by main_character status - select based ONLY on relationship weight with the protagonist
+     * Include characters regardless of whether they are main or supporting characters
+     * Focus on characters who have meaningful interactions/relationships with the protagonist (weight >= 3.0)
+   - Assign unique ID numbers to each character (ensure no duplicates)
+   - Determine their common name (most frequently used in text)
+   - List ALL references to them (nicknames, titles, etc.)
+   - IMPORTANT: Extract the protagonist plus all characters with relationship weight >= 3.0 to the protagonist (up to {max_main_characters} total characters). If fewer characters meet the weight >= 3.0 criteria, extract only those that qualify."""
+        else:
+            system_prompt += """
    - Extract EVERY character mentioned in the text:
      * Include all characters regardless of their role or significance
      * Do not skip minor or briefly mentioned characters
@@ -56,7 +103,9 @@ class APIClient:
    - Identify main characters based on:
      * Frequency of appearance
      * Plot significance
-     * Number of interactions with others
+     * Number of interactions with others"""
+        
+        system_prompt += """
 
 2. Relationship Analysis:
    - Document ALL character interactions, even brief ones
@@ -78,7 +127,10 @@ class APIClient:
        - 1.0: Best friends, family, deep love
    - Include relationship descriptors (family, friends, enemies, brief encounter, lovers, met in the elevator, etc.)
 
-3. Special Instructions:
+3. Special Instructions:"""
+        
+        if max_main_characters is None:
+            system_prompt += """
    - Include ALL characters, no matter how minor their role
    - Be thorough in relationship mapping
    - Consider indirect interactions
@@ -90,6 +142,15 @@ class APIClient:
      * Have few or weak relationships
      * Seem insignificant to the plot
      * Are only mentioned in passing"""
+        else:
+            system_prompt += f"""
+   - Focus ONLY on the protagonist and characters with relationship weight >= 3.0 to the protagonist (up to {max_main_characters} total characters)
+   - Map relationships ONLY between these selected characters
+   - Be thorough in relationship mapping between all selected characters
+   - Ensure every character has at least one connection with another character
+   - Only include relationships with weight >= 3.0 when selecting characters
+   - If fewer than {max_main_characters} characters have weight >= 3.0 with the protagonist, include only those that qualify
+   - Check for and eliminate any duplicate characters or relationships"""
 
         if desc_sentences is not None:
             system_prompt += f"""
@@ -112,7 +173,10 @@ class APIClient:
      * Artistic style suggestions for consistent character representation"""
 
         if previous_json:
-            system_prompt += f"\n\nPreliminary character and relationship data: {json.dumps(previous_json)}\nCarefully update this data: add any missing characters (no matter how minor or briefly mentioned), add missing relationships, verify weights and positivity, ensure all characters have connections, and check for any duplicate characters or relationships. Every character in the text must be included, even those with minimal roles or single appearances."
+            if max_main_characters is not None:
+                system_prompt += f"\n\nPreliminary character and relationship data: {json.dumps(previous_json)}\nCarefully update this data: ensure you have the protagonist plus characters with relationship weight >= 3.0 to the protagonist (up to {max_main_characters} total characters). If fewer characters have weight >= 3.0, include only those that qualify. Prioritize characters with highest relationship weights to the protagonist regardless of main_character status, add missing relationships, verify weights and positivity (ensure relationship weights are >= 3.0), ensure all characters have connections, and check for any duplicate characters or relationships."
+            else:
+                system_prompt += f"\n\nPreliminary character and relationship data: {json.dumps(previous_json)}\nCarefully update this data: add any missing characters (no matter how minor or briefly mentioned), add missing relationships, verify weights and positivity, ensure all characters have connections, and check for any duplicate characters or relationships. Every character in the text must be included, even those with minimal roles or single appearances."
 
         return [
             {"role": "system", "content": system_prompt},
@@ -201,88 +265,48 @@ class APIClient:
         }
 
     def make_request(self, messages: list, desc_sentences: Optional[int] = None, generate_portraits: bool = False, temperature: float = 1) -> dict:
-        """Make API request with retry mechanism."""
-        if self.use_openrouter:
-            # OpenRouter API implementation
-            for attempt in range(self.max_retries):
-                try:
-                    response = requests.post(
-                        "https://openrouter.ai/api/v1/chat/completions",
-                        headers={
-                            "Authorization": f"Bearer {self.api_key}",
-                            "X-Title": "Character Analyzer"
-                        },
-                        json={
-                            "model": "google/gemini-2.0-flash-exp:free" if self.model is None else self.model,
-                            "messages": messages,
-                            "temperature": temperature,
-                            "response_format": {
-                                "type": "json_schema",
-                                "json_schema": {
-                                    "name": "characters",
-                                    "strict": True,
-                                    "schema": self.get_schema(desc_sentences, generate_portraits)
-                                }
-                            }
-                        }
-                    )
-                    
-                    if response.status_code == 200 and ("choices" in response.json()):
-                        return response.json()
-                    
-                    print(f"Attempt {attempt + 1} failed. Status: {response.status_code}")
-                    print(response.text)
-                    
-                    if attempt < self.max_retries - 1:
-                        print(f"Retrying in {self.retry_delay} seconds...")
-                        time.sleep(self.retry_delay)
-                
-                except Exception as e:
-                    print(f"Error during attempt {attempt + 1}: {str(e)}")
-                    if attempt < self.max_retries - 1:
-                        print(f"Retrying in {self.retry_delay} seconds...")
-                        time.sleep(self.retry_delay)
-            
-            raise Exception("Max retries exceeded")
-        else:
-            # Gemini implementation
-            genai.configure(api_key=self.api_key)
-            return_json = genai.protos.FunctionDeclaration(
-                name="return_json",
-                description="Return json with characters and relationships",
-                parameters=self.get_schema(desc_sentences, generate_portraits)
-            )
-            
-            model = genai.GenerativeModel(
-                model_name="gemini-2.0-flash-exp" if self.model is None else self.model,
-                generation_config={"temperature": temperature},
-                tools=[return_json]
-            )
-            
-            combined_prompt = f"{messages[0]['content']}\n\nInput text:\n{messages[1]['content'][0]['text']}"
-            
+        """Make API request with retry mechanism and automatic key rotation."""
+        # Gemini implementation using new google.genai API
+        model_name = "gemini-2.5-flash" if self.model is None else self.model
+        combined_prompt = f"{messages[0]['content']}\n\nInput text:\n{messages[1]['content'][0]['text']}"
+        
+        for attempt in range(self.max_retries):
             try:
-                for attempt in range(self.max_retries):
-                    try:
-                        result = model.generate_content(combined_prompt, tool_config={'function_calling_config':'ANY'})
-                        return result
-                        
-                    except Exception as e:
-                        print(f"Error during attempt {attempt + 1}: {str(e)}")
-                        if attempt < self.max_retries - 1:
-                            print(f"Retrying in {self.retry_delay} seconds...")
-                            time.sleep(self.retry_delay)
+                # Use new google.genai API with structured output
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=combined_prompt,
+                    config={
+                        "temperature": temperature,
+                        "response_mime_type": "application/json",
+                        "response_schema": self.get_schema(desc_sentences, generate_portraits)
+                    }
+                )
+                return response
                 
-                raise Exception("Max retries exceeded")
-            finally:
-                if not hasattr(self, 'use_openrouter') and 'model' in locals():
-                    model.close()
+            except Exception as e:
+                error_str = str(e)
+                print(f"Error during attempt {attempt + 1} with key {self.current_key_index + 1}: {error_str}")
+                
+                # Check if it's a quota/rate limit error
+                if self.is_quota_exceeded_error(e):
+                    print("Quota/Rate limit exceeded. Attempting to switch to next API key...")
+                    if self.switch_to_next_key():
+                        # Reset attempt counter when switching keys
+                        continue
+                    else:
+                        print("No more API keys available. Waiting before retry...")
+                
+                if attempt < self.max_retries - 1:
+                    print(f"Retrying in {self.retry_delay} seconds...")
+                    time.sleep(self.retry_delay)
+        
+        raise Exception("Max retries exceeded with all API keys")
 
 class CharacterExtractor:
-    def __init__(self, api_key: str, use_openrouter: bool, model: Optional[str] = None):
+    def __init__(self, api_keys: List[str], model: Optional[str] = None):
         self.file_handler = FileHandler()
-        self.api_client = APIClient(api_key, use_openrouter, model)
-        self.use_openrouter = use_openrouter
+        self.api_client = APIClient(api_keys, model)
     
     def get_output_filename(self, base_filename: str, iteration: int) -> str:
         """Generate output filename with iteration number."""
@@ -293,8 +317,11 @@ class CharacterExtractor:
         """Create a NetworkX graph from character data."""
         G = nx.Graph()
         
+        characters = data['characters']
+        relations = data['relations']
+        
         # Add nodes (characters)
-        for character in data['characters']:
+        for character in characters:
             G.add_node(
                 character['id'],
                 common_name=character['common_name'],
@@ -302,7 +329,7 @@ class CharacterExtractor:
             )
         
         # Add edges (relations)
-        for relation in data['relations']:
+        for relation in relations:
             # If edge exists, append new relations, otherwise create new edge
             if G.has_edge(relation['id1'], relation['id2']):
                 G[relation['id1']][relation['id2']]['weight'] += relation['weight']
@@ -383,7 +410,7 @@ class CharacterExtractor:
     def process_text(self, input_file: str, output_file: str, previous_json_file: Optional[str] = None,
                     iterations: int = 1, delay: int = 300, plot_graph: bool = False,
                     desc_sentences: Optional[int] = None, generate_portraits: bool = False,
-                    copies: int = 1, temperature: float = 1.0) -> None:
+                    copies: int = 1, temperature: float = 1.0, max_main_characters: Optional[int] = None) -> None:
         """Process text file and extract character information."""
         text = self.file_handler.read_file(input_file)
         previous_json = None
@@ -407,7 +434,7 @@ class CharacterExtractor:
             retry_delay = 10
             for attempt in range(max_retries):
                 try:
-                    messages = self.api_client.create_messages(text, previous_json, desc_sentences, generate_portraits, copies)
+                    messages = self.api_client.create_messages(text, previous_json, desc_sentences, generate_portraits, copies, max_main_characters)
                     result = self.api_client.make_request(messages, desc_sentences, generate_portraits, temperature)
                     
                     output_filename = self.get_output_filename(output_file, i)
@@ -417,11 +444,14 @@ class CharacterExtractor:
                     with open(debug_filename, 'w', encoding='utf-8') as f:
                         f.write(f"Attempt {attempt + 1} Result Content:\n{result}")
 
-                    if self.use_openrouter:
-                        content = json.loads(result["choices"][0]["message"]["content"])
+                    # New google.genai API returns JSON directly
+                    if hasattr(result, 'text'):
+                        content = json.loads(result.text)
+                    elif hasattr(result, 'content'):
+                        content = json.loads(result.content)
                     else:
-                        fc = result.candidates[0].content.parts[0].function_call
-                        content = type(fc).to_dict(fc)["args"]
+                        # Fallback: try to parse as JSON string
+                        content = json.loads(str(result))
                     
                     # Try to parse and validate the JSON structure
                     #content = json.loads(response_content)
@@ -459,22 +489,98 @@ class CharacterExtractor:
                         time.sleep(retry_delay)
                     else:
                         raise Exception(f"Failed to process iteration {i + 1} after {max_retries} attempts")
+        
+        # After all iterations, keep only the last result and delete intermediate files
+        if iterations > 1:
+            print(f"\nCleaning up intermediate files, keeping only the last iteration...")
+            last_iteration = iterations - 1
+            final_output = self.get_output_filename(output_file, last_iteration)
+            final_debug = str(Path(final_output).with_suffix('.debug.txt'))
+            final_image = str(Path(final_output).with_suffix('.png'))
+            
+            # Rename last iteration files to final names (without iteration number)
+            final_base = str(Path(output_file).parent / Path(output_file).stem)
+            final_json = f"{final_base}.json"
+            final_debug_renamed = f"{final_base}.debug.txt"
+            final_image_renamed = f"{final_base}.png"
+            
+            # Move last iteration files to final names
+            if Path(final_output).exists():
+                Path(final_output).rename(final_json)
+                print(f"Renamed {final_output} to {final_json}")
+            
+            if Path(final_debug).exists():
+                Path(final_debug).rename(final_debug_renamed)
+                print(f"Renamed {final_debug} to {final_debug_renamed}")
+            
+            if plot_graph and Path(final_image).exists():
+                Path(final_image).rename(final_image_renamed)
+                print(f"Renamed {final_image} to {final_image_renamed}")
+            
+            # Delete intermediate iteration files
+            for i in range(iterations - 1):
+                intermediate_json = self.get_output_filename(output_file, i)
+                intermediate_debug = str(Path(intermediate_json).with_suffix('.debug.txt'))
+                intermediate_image = str(Path(intermediate_json).with_suffix('.png'))
+                
+                if Path(intermediate_json).exists():
+                    Path(intermediate_json).unlink()
+                    print(f"Deleted {intermediate_json}")
+                
+                if Path(intermediate_debug).exists():
+                    Path(intermediate_debug).unlink()
+                    print(f"Deleted {intermediate_debug}")
+                
+                if plot_graph and Path(intermediate_image).exists():
+                    Path(intermediate_image).unlink()
+                    print(f"Deleted {intermediate_image}")
+            
+            print(f"Cleanup complete. Final result saved as: {final_json}")
 
 def cleanup_genai():
     """Clean up Gemini API resources."""
-    try:
-        genai.reset()
-    except:
-        pass
+    # New google.genai API doesn't require explicit cleanup
+    # Client resources are automatically managed
+    pass
+
+def load_api_keys_from_env(env_path: Path) -> List[str]:
+    """Load API keys from .env file. Supports comma-separated format:
+    GEMINI_API_KEY=key1,key2,key3
+    """
+    if not env_path.exists():
+        raise ValueError(f".env file not found at {env_path}")
+    
+    # Load .env file
+    load_dotenv(env_path)
+    
+    api_keys = []
+    
+    # Get GEMINI_API_KEYS (supports comma-separated format)
+    api_key_value = os.getenv("GEMINI_API_KEYS")
+    if api_key_value:
+        # Check if it contains commas (multiple keys in one line)
+        if ',' in api_key_value:
+            # Split by comma and strip whitespace
+            keys = [key.strip() for key in api_key_value.split(',') if key.strip()]
+            api_keys.extend(keys)
+        else:
+            # Single key
+            api_keys.append(api_key_value)
+    
+    if not api_keys:
+        raise ValueError(f"No GEMINI_API_KEYS found in {env_path}. Please add GEMINI_API_KEYS (comma-separated format: key1,key2,key3)")
+    
+    print(f"Loaded {len(api_keys)} API key(s) from .env file")
+    return api_keys
 
 def main():
     parser = argparse.ArgumentParser(description='Extract characters and their relationships from text.')
-    parser.add_argument('input_file', help='Input text file to analyze')
-    parser.add_argument('output_file', help='Base name for output JSON files')
+    parser.add_argument('input_file', nargs='?', help='Input text file to analyze (optional, auto-detects from origin_txt)')
+    parser.add_argument('output_file', nargs='?', help='Base name for output JSON files (optional, auto-generates)')
     parser.add_argument('-iter', '--iterations', type=int, default=1,
                       help='Number of iterations to run (default: 1)')
-    parser.add_argument('-delay', '--delay', type=int, default=10,
-                      help='Delay between iterations in seconds (default: 10)')
+    parser.add_argument('-delay', '--delay', type=int, default=60,
+                      help='Delay between iterations in seconds (default: 60)')
     parser.add_argument('-prev', '--previous', 
                       help='Previous JSON file to use as initial data')
     parser.add_argument('-plot', '--plot_graph', action='store_true',
@@ -487,35 +593,153 @@ def main():
                       help='Number of copies of text to send as prompt (default: 1)')
     parser.add_argument('-t', '--temperature', type=float, default=1.0,
                       help='Temperature (default: 1.0)')
-    parser.add_argument('-or', '--openrouter', action='store_true',
-                      help='Use OpenRouter API instead of Gemini')
     parser.add_argument('-m', '--model', type=str, default=None,
-                      help='Model to use (default: gemini-2.0-flash-exp for Gemini, google/gemini-2.0-flash-exp:free for OpenRouter)')
+                      help='Model to use (default: gemini-2.5-flash)')
+    parser.add_argument('-max-main', '--max_main_characters', type=int, default=20,
+                      help='Extract protagonist + N-1 characters with highest relationship weights to protagonist (default: 20)')
     
     args = parser.parse_args()
     
-    if args.openrouter:
-        api_key = os.environ.get("OPENROUTER_API_KEY")
-        if not api_key:
-            raise ValueError("OPENROUTER_API_KEY environment variable is required when using --openrouter")
-    else:
-        api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY environment variable is required")
+    # Load API keys from .env file
+    env_path = Path(__file__).parent / ".env"
+    api_keys = load_api_keys_from_env(env_path)
     
-    extractor = CharacterExtractor(api_key, args.openrouter, args.model)
-    extractor.process_text(
-        input_file=args.input_file,
-        output_file=args.output_file,
-        previous_json_file=args.previous,
-        iterations=args.iterations,
-        delay=args.delay,
-        plot_graph=args.plot_graph,
-        desc_sentences=args.desc_sentences,
-        generate_portraits=args.generate_portraits,
-        copies=args.copies,
-        temperature=args.temperature
-    )
+    extractor = CharacterExtractor(api_keys, args.model)
+    
+    # Auto-detect input files from origin_txt if not provided
+    if args.input_file is None:
+        # Use script location to find project root (parent of chargraph folder)
+        script_dir = Path(__file__).parent
+        project_root = script_dir.parent
+        
+        # Try multiple possible paths
+        possible_paths = [
+            project_root / "gajiAI/rag-chatbot_test/data/origin_txt",  # From script location (most reliable)
+            Path("gajiAI/rag-chatbot_test/data/origin_txt"),  # From current working directory
+            Path("../gajiAI/rag-chatbot_test/data/origin_txt"),  # From chargraph folder
+        ]
+        
+        origin_txt_path = None
+        for path in possible_paths:
+            resolved_path = path.resolve() if path.is_absolute() or path.exists() else path
+            if resolved_path.exists():
+                origin_txt_path = resolved_path
+                break
+        
+        if origin_txt_path is None:
+            raise ValueError(f"origin_txt directory not found. Tried: {[str(p) for p in possible_paths]}. Current working directory: {os.getcwd()}, Script location: {script_dir}")
+        
+        # Find all .txt files (excluding .metadata.json)
+        txt_files = sorted(list(origin_txt_path.glob("*.txt")))
+        if not txt_files:
+            raise ValueError(f"No .txt files found in {origin_txt_path}")
+        
+        print(f"Found {len(txt_files)} text file(s) in origin_txt. Processing all files...")
+        
+        # Process all txt files sequentially
+        for txt_file in txt_files:
+            input_file = str(txt_file)
+            print(f"\n{'='*60}")
+            print(f"Processing: {txt_file.name}")
+            print(f"{'='*60}")
+            
+            # Auto-generate output file name from input file
+            input_path = Path(input_file)
+            output_base = input_path.stem
+            # Use script location to find project root
+            script_dir = Path(__file__).parent
+            project_root = script_dir.parent
+            
+            # Try multiple possible paths for char_graph
+            possible_char_graph_paths = [
+                project_root / "gajiAI/rag-chatbot_test/data/char_graph",  # From script location (most reliable)
+                Path("gajiAI/rag-chatbot_test/data/char_graph"),  # From current working directory
+                Path("../gajiAI/rag-chatbot_test/data/char_graph"),  # From chargraph folder
+            ]
+            
+            char_graph_path = None
+            for path in possible_char_graph_paths:
+                resolved_path = path.resolve() if path.is_absolute() or path.exists() else path
+                # Check if parent directory exists or can be created
+                if resolved_path.parent.exists() or resolved_path.parent.parent.exists():
+                    char_graph_path = resolved_path
+                    break
+            
+            if char_graph_path is None:
+                # Use first path and create it
+                char_graph_path = possible_char_graph_paths[0].resolve()
+            
+            char_graph_path.mkdir(parents=True, exist_ok=True)
+            output_file = str(char_graph_path / output_base)
+            
+            print(f"Input: {input_file}")
+            print(f"Output: {output_file}")
+            
+            extractor.process_text(
+                input_file=input_file,
+                output_file=output_file,
+                previous_json_file=args.previous,
+                iterations=args.iterations,
+                delay=args.delay,
+                plot_graph=args.plot_graph,
+                desc_sentences=args.desc_sentences,
+                generate_portraits=args.generate_portraits,
+                copies=args.copies,
+                temperature=args.temperature,
+                max_main_characters=args.max_main_characters
+            )
+            
+            print(f"Completed: {txt_file.name}\n")
+    else:
+        # Single file mode (manual input)
+        input_file = args.input_file
+        
+        # Auto-generate output file name from input file if not provided
+        if args.output_file is None:
+            input_path = Path(input_file)
+            output_base = input_path.stem
+            # Use script location to find project root
+            script_dir = Path(__file__).parent
+            project_root = script_dir.parent
+            
+            # Try multiple possible paths for char_graph
+            possible_char_graph_paths = [
+                project_root / "gajiAI/rag-chatbot_test/data/char_graph",  # From script location (most reliable)
+                Path("gajiAI/rag-chatbot_test/data/char_graph"),  # From current working directory
+                Path("../gajiAI/rag-chatbot_test/data/char_graph"),  # From chargraph folder
+            ]
+            
+            char_graph_path = None
+            for path in possible_char_graph_paths:
+                resolved_path = path.resolve() if path.is_absolute() or path.exists() else path
+                # Check if parent directory exists or can be created
+                if resolved_path.parent.exists() or resolved_path.parent.parent.exists():
+                    char_graph_path = resolved_path
+                    break
+            
+            if char_graph_path is None:
+                # Use first path and create it
+                char_graph_path = possible_char_graph_paths[0].resolve()
+            
+            char_graph_path.mkdir(parents=True, exist_ok=True)
+            output_file = str(char_graph_path / output_base)
+            print(f"Auto-generated output file: {output_file}")
+        else:
+            output_file = args.output_file
+        
+        extractor.process_text(
+            input_file=input_file,
+            output_file=output_file,
+            previous_json_file=args.previous,
+            iterations=args.iterations,
+            delay=args.delay,
+            plot_graph=args.plot_graph,
+            desc_sentences=args.desc_sentences,
+            generate_portraits=args.generate_portraits,
+            copies=args.copies,
+            temperature=args.temperature,
+            max_main_characters=args.max_main_characters
+        )
 
 if __name__ == "__main__":
         main()

@@ -1,0 +1,318 @@
+{
+    "characters": [
+        {
+            "id": 1,
+            "common_name": "Sherlock Holmes",
+            "main_character": true,
+            "names": [
+                "Sherlock Holmes",
+                "Holmes",
+                "Mr. Holmes",
+                "My dear Holmes",
+                "Holmes the sleuth-hound",
+                "Holmes the relentless, keen-witted, ready-handed criminal agent"
+            ],
+            "description": "A brilliant, eccentric consulting detective with unparalleled powers of observation and deduction. He lives at 221B Baker Street, often immersed in books or chemical experiments, and is driven by the intellectual challenge of solving crimes rather than financial gain. He views emotions as distractions and is known for his logical, precise mind, occasionally using disguises and often relying on Dr. Watson for companionship and chronicling his cases. He can be abrupt but is fundamentally committed to justice, and has a unique respect for Irene Adler."
+        },
+        {
+            "id": 2,
+            "common_name": "Dr. Watson",
+            "main_character": true,
+            "names": [
+                "Dr. Watson",
+                "Watson",
+                "Doctor",
+                "My dear Watson",
+                "Boswell"
+            ],
+            "description": "Sherlock Holmes's loyal friend, chronicler, and assistant. A medical doctor, he often accompanies Holmes on investigations, providing a grounded perspective and moral compass. Though less brilliant than Holmes, his methodical nature and willingness to assist are invaluable. He is recently married at the start of the collection but frequently returns to Baker Street to aid Holmes, often serving as the narrative voice and sounding board for his friend's deductions."
+        },
+        {
+            "id": 3,
+            "common_name": "Irene Adler",
+            "main_character": true,
+            "names": [
+                "Irene Adler",
+                "the woman",
+                "Mademoiselle",
+                "Irene Norton",
+                "Madame",
+                "Miss Irene Adler"
+            ],
+            "description": "A former opera singer and adventuress, known for her beauty, intelligence, and resolute character. She is the only woman to have ever outsmarted Sherlock Holmes, earning his profound respect, and is referred to by him as 'the woman'. Her possession of a compromising photograph of the King of Bohemia leads to the events of 'A Scandal in Bohemia'. She is independent and fearless, ultimately choosing love over blackmail."
+        },
+        {
+            "id": 4,
+            "common_name": "John Turner",
+            "main_character": true,
+            "names": [
+                "John Turner",
+                "Mr. John Turner",
+                "Black Jack of Ballarat",
+                "old Turner",
+                "dad",
+                "the rich landowner"
+            ],
+            "description": "The wealthy landowner of Boscombe Valley and the true murderer of Charles McCarthy. A man with a dark past as 'Black Jack of Ballarat' in Australia, he was blackmailed by McCarthy for twenty years. He is a physically imposing man, but his health is failing due to diabetes and the stress of his secret. Driven by a desire to protect his daughter's future and prevent her entanglement with McCarthy's son, he commits the murder. He shows remorse but also a fierce protectiveness of his family and reputation."
+        },
+        {
+            "id": 5,
+            "common_name": "John Clay",
+            "main_character": true,
+            "names": [
+                "John Clay",
+                "Vincent Spaulding",
+                "the red-headed man",
+                "young John Clay"
+            ],
+            "description": "A notorious and cunning criminal, described as one of the smartest men in London. He is a master of disguise and a highly intelligent, audacious individual with royal blood. Under the alias Vincent Spaulding, he orchestrates the elaborate 'Red-Headed League' scheme to tunnel into a bank vault. His criminal activities are marked by a unique blend of daring and meticulous planning, making him a formidable adversary for Holmes."
+        },
+        {
+            "id": 6,
+            "common_name": "Neville St. Clair",
+            "main_character": true,
+            "names": [
+                "Neville St. Clair",
+                "Mr. St. Clair",
+                "Hugh Boone",
+                "the man with the twisted lip",
+                "crippled wretch",
+                "professional beggar",
+                "Mr. Neville St. Clair"
+            ],
+            "description": "A seemingly respectable gentleman living in Lee, Kent, who leads a double life as a professional beggar named Hugh Boone. He is intelligent and resourceful, using his acting skills and makeup to maintain his disguise. His disappearance and the mystery surrounding it form the core of 'The Man with the Twisted Lip', revealing his desperate measures to secure a comfortable life for his family while concealing his illicit income. He is driven by the shame of his past and his desire to protect his children from it."
+        },
+        {
+            "id": 7,
+            "common_name": "James Ryder",
+            "main_character": true,
+            "names": [
+                "James Ryder",
+                "Ryder",
+                "the little man",
+                "John Robinson"
+            ],
+            "description": "The head attendant at the Hotel Cosmopolitan and the true thief of the blue carbuncle. He is a nervous and desperate man, driven by the temptation of sudden wealth. He frames an innocent plumber, John Horner, for the crime. His clumsy attempt to conceal the gem inside a goose, and his subsequent frantic search for it, lead Holmes to unravel the truth. He is ultimately allowed to escape justice by Holmes, who believes he has been sufficiently frightened."
+        },
+        {
+            "id": 8,
+            "common_name": "Lord Robert St. Simon",
+            "main_character": true,
+            "names": [
+                "Lord Robert St. Simon",
+                "Lord St. Simon",
+                "Robert Walsingham de Vere St. Simon",
+                "noble lord"
+            ],
+            "description": "The second son of the Duke of Balmoral, an English nobleman who is the client in 'The Adventure of the Noble Bachelor'. He is a man of aristocratic bearing, somewhat pompous, and deeply concerned with social standing. His wedding to Hatty Doran is abruptly interrupted by her disappearance, leading him to seek Holmes's assistance. He is initially bewildered and offended by the turn of events, showing a lack of understanding for his wife's background."
+        },
+        {
+            "id": 9,
+            "common_name": "Alexander Holder",
+            "main_character": true,
+            "names": [
+                "Alexander Holder",
+                "Mr. Holder",
+                "the banker"
+            ],
+            "description": "A senior partner in a prominent London banking firm and a client of Sherlock Holmes. He is a respectable and honorable man, overwhelmed by the public scandal and personal grief caused by the theft of the Beryl Coronet, a national treasure entrusted to his care. He is initially convinced of his son's guilt due to circumstantial evidence, but deeply loves his family and is desperate to clear the matter, eventually realizing his own misjudgment."
+        },
+        {
+            "id": 10,
+            "common_name": "Dr. Grimesby Roylott",
+            "main_character": true,
+            "names": [
+                "Dr. Grimesby Roylott",
+                "Dr. Roylott",
+                "the Doctor"
+            ],
+            "description": "The stepfather of Helen Stoner and Julia Stoner, and the antagonist in 'The Adventure of the Speckled Band'. He is the last survivor of an old, dissolute Saxon family, a man of immense physical strength and violent temper, intensified by his time in the tropics. He has a passion for exotic Indian animals and is driven by greed to prevent his stepdaughters' marriages, which would reduce his inheritance. He is a cunning and ruthless individual, ultimately becoming a victim of his own deadly plot."
+        }
+    ],
+    "relations": [
+        {
+            "id1": 1,
+            "id2": 2,
+            "relation": [
+                "friends",
+                "colleagues",
+                "companions",
+                "chronicler"
+            ],
+            "weight": 10,
+            "positivity": 1.0
+        },
+        {
+            "id1": 1,
+            "id2": 3,
+            "relation": [
+                "adversaries",
+                "intellectual rivals",
+                "respected acquaintance"
+            ],
+            "weight": 8,
+            "positivity": 0.8
+        },
+        {
+            "id1": 1,
+            "id2": 4,
+            "relation": [
+                "detective-criminal",
+                "confessor"
+            ],
+            "weight": 8,
+            "positivity": -0.4
+        },
+        {
+            "id1": 1,
+            "id2": 5,
+            "relation": [
+                "detective-criminal",
+                "adversaries",
+                "intellectual rivals"
+            ],
+            "weight": 9,
+            "positivity": -0.9
+        },
+        {
+            "id1": 1,
+            "id2": 6,
+            "relation": [
+                "detective-subject",
+                "unveiled identity",
+                "benefactor"
+            ],
+            "weight": 7,
+            "positivity": 0.0
+        },
+        {
+            "id1": 1,
+            "id2": 7,
+            "relation": [
+                "detective-criminal",
+                "confessor",
+                "pardoner"
+            ],
+            "weight": 6,
+            "positivity": -0.2
+        },
+        {
+            "id1": 1,
+            "id2": 8,
+            "relation": [
+                "client-consultant",
+                "professional"
+            ],
+            "weight": 6,
+            "positivity": 0.4
+        },
+        {
+            "id1": 1,
+            "id2": 9,
+            "relation": [
+                "client-consultant",
+                "sympathetic advisor"
+            ],
+            "weight": 7,
+            "positivity": 0.6
+        },
+        {
+            "id1": 1,
+            "id2": 10,
+            "relation": [
+                "detective-murderer",
+                "adversaries",
+                "fatal confrontation"
+            ],
+            "weight": 9,
+            "positivity": -1.0
+        },
+        {
+            "id1": 2,
+            "id2": 3,
+            "relation": [
+                "brief encounter",
+                "observer",
+                "witness"
+            ],
+            "weight": 2,
+            "positivity": 0.1
+        },
+        {
+            "id1": 2,
+            "id2": 4,
+            "relation": [
+                "witness",
+                "observer"
+            ],
+            "weight": 5,
+            "positivity": 0.0
+        },
+        {
+            "id1": 2,
+            "id2": 5,
+            "relation": [
+                "brief encounter",
+                "arrest witness",
+                "adversary"
+            ],
+            "weight": 4,
+            "positivity": -0.5
+        },
+        {
+            "id1": 2,
+            "id2": 6,
+            "relation": [
+                "discovery",
+                "witness",
+                "medical aid"
+            ],
+            "weight": 5,
+            "positivity": 0.0
+        },
+        {
+            "id1": 2,
+            "id2": 7,
+            "relation": [
+                "witness",
+                "brief encounter",
+                "medical aid"
+            ],
+            "weight": 4,
+            "positivity": -0.1
+        },
+        {
+            "id1": 2,
+            "id2": 8,
+            "relation": [
+                "brief encounter",
+                "witness",
+                "observer"
+            ],
+            "weight": 3,
+            "positivity": 0.1
+        },
+        {
+            "id1": 2,
+            "id2": 9,
+            "relation": [
+                "brief encounter",
+                "witness",
+                "observer"
+            ],
+            "weight": 3,
+            "positivity": 0.1
+        },
+        {
+            "id1": 2,
+            "id2": 10,
+            "relation": [
+                "adversaries",
+                "witness to death",
+                "confrontation"
+            ],
+            "weight": 7,
+            "positivity": -0.8
+        }
+    ]
+}
